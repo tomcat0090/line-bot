@@ -74,6 +74,9 @@ use Cake\Utility\Security;
  * idea to create multiple configuration files, and separate the configuration
  * that changes from configuration that does not. This makes deployment simpler.
  */
+if (isset($_ENV['CAKE_ENV'])) {
+    Configure::load('app_' . $_ENV['CAKE_ENV'], 'default');
+}
 try {
     Configure::config('default', new PhpConfig());
     Configure::load('app', 'default', false);
@@ -218,6 +221,6 @@ Type::build('datetime')
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
  */
-if (Configure::read('debug')) {
+if (Configure::read('debug') && !isset($_ENV['CAKE_ENV'])) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
